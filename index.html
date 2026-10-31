@@ -3,6 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+/* ?view=desktop preview: force desktop theme on narrow screens */
+try {
+  if (new URLSearchParams(location.search).get("view") === "desktop") {
+    document.querySelector('meta[name="viewport"]').setAttribute("content", "width=1280");
+  }
+} catch (e) {}
+</script>
 <title>Glitch Snake | Jade Static Builds</title>
 <meta name="description" content="A small browser Snake game with glitch bursts. No signup, no upload, high score saved on your device only.">
 <style>
@@ -20,6 +28,23 @@ button.secondary{background:transparent;color:#eafcff;border:1px solid #00f0ff}
 .pad .empty{visibility:hidden}
 .note{color:#9fb8c8;font-size:13px;margin:4px 0 0}
 @media (max-height:750px){.foot{display:none}}
+/* --- Desktop (Tier 5 desktop-readiness): everything in this block only
+   applies at 1024px and up. Phone CSS above is untouched. Arcade pattern:
+   centered, larger play area, HUD scaled sensibly. */
+@media (min-width:1024px){
+  main{max-width:780px}
+  h1{font-size:32px}
+  .score{font-size:18px;gap:8px 32px}
+  canvas{width:min(62vw,560px,calc(100dvh - 380px))}
+  .pad{grid-template-columns:repeat(3,112px);gap:14px}
+  .pad button{padding:28px 0}
+  button{font-size:17px;padding:10px 20px}
+  .note{font-size:14px}
+}
+@media (min-width:1440px){
+  main{max-width:900px}
+  canvas{width:min(54vw,640px,calc(100dvh - 380px))}
+}
 a{color:#00f0ff}
 </style>
 </head>
@@ -535,17 +560,20 @@ document.addEventListener('keydown', e => {
   if (k) { e.preventDefault(); setDir(k[0], k[1]); }
   if (e.key === ' ') { e.preventDefault(); if (!running) start(); }
 });
-// Swipe on the canvas.
+// Swipe on the canvas. Pointer events cover touch, mouse and pen, so a
+// desktop drag steers exactly like a phone swipe (canvas has
+// touch-action:none, so no scroll gesture competes).
 let sx = null, sy = null;
-cv.addEventListener('touchstart', e => { const t = e.touches[0]; sx = t.clientX; sy = t.clientY; }, {passive: true});
-cv.addEventListener('touchmove', e => {
+cv.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; });
+cv.addEventListener('pointermove', e => {
   if (sx === null) return;
-  e.preventDefault();
-  const t = e.touches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+  const dx = e.clientX - sx, dy = e.clientY - sy;
   if (Math.abs(dx) < 24 && Math.abs(dy) < 24) return;
   if (Math.abs(dx) > Math.abs(dy)) setDir(dx > 0 ? 1 : -1, 0); else setDir(0, dy > 0 ? 1 : -1);
   sx = null; sy = null;
-}, {passive: false});
+});
+cv.addEventListener('pointerup', () => { sx = null; sy = null; });
+cv.addEventListener('pointercancel', () => { sx = null; sy = null; });
 renderHistory();
 reset();
 </script>
