@@ -320,7 +320,11 @@ function draw() {
   } else if (food) {
     const orb = (eaten + 1) % 5 === 0;
     ctx.fillStyle = orb ? t.orb : t.food;
+    // glow
+    ctx.save();
+    ctx.shadowColor = orb ? t.orb : t.food; ctx.shadowBlur = 14;
     ctx.fillRect(food.x*CELL+3, food.y*CELL+3, CELL-6, CELL-6);
+    ctx.restore();
   }
   // Shield tile: a blue diamond (shape-coded, not colour alone), drawn
   // only outside frenzy. While active, the board edge glows gold.
@@ -346,8 +350,17 @@ function draw() {
     });
   } else {
     snake.forEach((s, i) => {
-      ctx.fillStyle = i === 0 ? '#ffffff' : (i % 2 ? t.a : t.b);
-      ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
+      if (i === 0) {
+        // head glow
+        ctx.save();
+        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 12;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = i % 2 ? t.a : t.b;
+        ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
+      }
     });
   }
   // Bite particles, in the bitten food's colour.
@@ -390,6 +403,7 @@ function draw() {
 function explode() {
   running = false;
   exploding = true; explodeFrame = 0;
+  playBlip(110);
   const t = themes[themeIndex];
   particles = snake.map((s, i) => ({
     x: s.x*CELL + CELL/2, y: s.y*CELL + CELL/2,
