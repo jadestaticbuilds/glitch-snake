@@ -15,7 +15,7 @@ try {
 <meta name="description" content="A small browser Snake game with glitch bursts. No signup, no upload, high score saved on your device only.">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#04070d;color:#eafcff;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:4px 16px;text-align:center;height:100dvh;overflow:hidden;display:flex;justify-content:center}
+body{margin:0;background:#04070d;color:#eafcff;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:4px 16px calc(4px + env(safe-area-inset-bottom));text-align:center;height:100vh;height:100dvh;overflow:hidden;display:flex;justify-content:center}
 main{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;align-items:center}
 h1{margin:0;font-size:26px;text-shadow:0 0 14px #00f0ff}
 p.sub{color:#9fb8c8;margin:2px 0 8px}
