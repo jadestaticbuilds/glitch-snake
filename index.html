@@ -15,18 +15,23 @@ try {
 <meta name="description" content="A small browser Snake game with glitch bursts. No signup, no upload, high score saved on your device only.">
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#04070d;color:#eafcff;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:4px 16px calc(4px + env(safe-area-inset-bottom));padding-bottom:34px;padding-bottom:max(34px, calc(4px + env(safe-area-inset-bottom)));text-align:center;height:100vh;height:100dvh;overflow:hidden;display:flex;justify-content:center}
-main{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;align-items:center}
-h1{margin:0;font-size:26px;text-shadow:0 0 14px #00f0ff}
-p.sub{color:#9fb8c8;margin:2px 0 8px}
-.score{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 24px;margin:0 0 4px;font-weight:700}
-canvas{display:block;width:min(92vw,440px,calc(100dvh - 400px));height:auto;aspect-ratio:1/1;margin:0 auto;background:#06121c;border:2px solid #00f0ff;border-radius:12px;box-shadow:0 0 24px rgba(0,240,255,.25);touch-action:none;flex-shrink:1}
-button{background:#00f0ff;color:#04121c;border:0;border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px;margin:6px 6px 0;cursor:pointer}
-button.secondary{background:transparent;color:#eafcff;border:1px solid #00f0ff}
-.pad{display:grid;grid-template-columns:repeat(3,96px);justify-content:center;gap:12px;margin:6px auto 0;flex-shrink:0}
-.pad button{margin:0;padding:24px 0;font-size:24px;border-radius:16px}
+body{margin:0;background:#03130b;color:#eafcff;position:relative;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:4px 16px calc(4px + env(safe-area-inset-bottom));padding-bottom:34px;padding-bottom:max(34px, calc(4px + env(safe-area-inset-bottom)));text-align:center;height:100vh;height:100dvh;overflow:hidden;display:flex;justify-content:center}
+main{width:100%;max-width:480px;height:100%;display:flex;flex-direction:column;align-items:center;position:relative;z-index:1;overflow-y:auto}
+body::before{content:"";position:fixed;inset:0;background:url('board-plate.webp') center/cover;opacity:.15;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;background:radial-gradient(120% 90% at 50% 0%,transparent 40%,rgba(2,10,6,.55));pointer-events:none}
+h1{margin:0;font-size:26px;letter-spacing:3px;color:#c9ffe2;text-shadow:0 0 18px rgba(47,232,168,.65),0 2px 0 rgba(0,0,0,.4)}
+p.sub{color:#8fb8a4;margin:2px 0 8px}
+.score{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 24px;margin:2px 0 6px;font-weight:700;background:rgba(6,32,20,.55);border:1px solid rgba(47,232,168,.25);border-radius:999px;padding:4px 18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 6px 16px rgba(0,0,0,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+canvas{display:block;width:min(92vw,440px,calc(100dvh - 424px));height:auto;aspect-ratio:1/1;margin:0 auto;background:#04150d;border:2px solid #2a9d74;border-radius:14px;box-shadow:0 0 0 4px rgba(4,21,13,.9),0 0 0 5px rgba(47,232,168,.35),0 18px 40px rgba(0,0,0,.55),0 0 28px rgba(31,191,138,.25);touch-action:none;flex-shrink:1}
+button{background:linear-gradient(180deg,#4be3ab,#23b97f);color:#032117;border:1px solid rgba(190,255,220,.5);border-radius:999px;padding:6px 13px;font-weight:700;font-size:15px;margin:4px 4px 0;cursor:pointer;box-shadow:0 4px 14px rgba(35,185,127,.35),inset 0 1px 0 rgba(255,255,255,.5)}
+button:active{transform:translateY(1px)}
+#startBtn{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(0,0,0,.20)),url('tex-jade.webp') center/cover,#0d5c38;color:#eafff3;text-shadow:0 1px 3px rgba(0,0,0,.55);border:1px solid rgba(210,255,230,.65);box-shadow:0 6px 18px rgba(20,160,100,.45),inset 0 1px 0 rgba(255,255,255,.45)}
+button.secondary{background:linear-gradient(180deg,rgba(8,30,19,.70),rgba(3,14,9,.84)),url('tex-stone.webp') center/cover,#0a2417;color:#c9f5df;border:1px solid rgba(47,232,168,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 4px 12px rgba(0,0,0,.35);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.console{margin:8px auto 0;padding:8px 10px 10px;border-radius:20px;background:linear-gradient(180deg,rgba(8,30,19,.88),rgba(3,14,9,.93)),url('tex-stone.webp') center/cover,#0a2417;border:1px solid rgba(47,232,168,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 14px 30px rgba(0,0,0,.45);flex-shrink:0}
+.pad{display:grid;grid-template-columns:repeat(3,80px);justify-content:center;gap:10px;margin:8px auto 0;flex-shrink:0}
+.pad button{margin:0;padding:16px 0;font-size:22px;border-radius:16px;background:linear-gradient(180deg,rgba(10,38,24,.42),rgba(3,14,9,.60)),url('tex-stone.webp') center/cover,#0a2417;color:#c8ffdf;border:1px solid rgba(120,255,190,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -10px 18px rgba(0,0,0,.45),0 6px 14px rgba(0,0,0,.45);text-shadow:0 0 10px rgba(47,232,168,.75),0 -1px 1px rgba(0,0,0,.85),0 1px 0 rgba(255,255,255,.18)}
 .pad .empty{visibility:hidden}
-.note{color:#9fb8c8;font-size:13px;margin:4px 0 0}
+.note{color:#8fb8a4;font-size:13px;margin:4px 0 0}
 @media (max-height:750px){.foot{display:none}}
 /* --- Desktop (Tier 5 desktop-readiness): everything in this block only
    applies at 1024px and up. Phone CSS above is untouched. Arcade pattern:
@@ -35,17 +40,17 @@ button.secondary{background:transparent;color:#eafcff;border:1px solid #00f0ff}
   main{max-width:780px}
   h1{font-size:32px}
   .score{font-size:18px;gap:8px 32px}
-  canvas{width:min(62vw,560px,calc(100dvh - 380px))}
-  .pad{grid-template-columns:repeat(3,112px);gap:14px}
-  .pad button{padding:28px 0}
-  button{font-size:17px;padding:10px 20px}
+  canvas{width:min(62vw,560px,calc(100dvh - 404px))}
+  .pad{grid-template-columns:repeat(3,96px);gap:12px}
+  .pad button{padding:20px 0}
+  button{font-size:16px;padding:8px 16px}
   .note{font-size:14px}
 }
 @media (min-width:1440px){
   main{max-width:900px}
-  canvas{width:min(54vw,640px,calc(100dvh - 380px))}
+  canvas{width:min(54vw,640px,calc(100dvh - 404px))}
 }
-a{color:#00f0ff}
+a{color:#2fe8a8}
 </style>
   <script data-goatcounter="https://georgestriderbuilds.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <style>
@@ -58,6 +63,7 @@ html,body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;us
 <h1>Glitch Snake</h1>
 <div class="score"><span>Score: <span id="score">0</span></span><span>Best: <span id="best">0</span></span><span>Today: <span id="todayBest">0</span></span><span id="shieldState"></span></div>
 <canvas id="game" width="400" height="400" aria-label="Glitch Snake game board"></canvas>
+<div class="console">
 <div>
 <button id="startBtn">Start</button>
 <button id="dailyBtn" class="secondary">Today's board</button>
@@ -67,6 +73,7 @@ html,body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;us
 <div class="pad" aria-label="Direction pad">
 <span class="empty"></span><button data-dir="up" aria-label="Up">▲</button><span class="empty"></span>
 <button data-dir="left" aria-label="Left">◀</button><button data-dir="down" aria-label="Down">▼</button><button data-dir="right" aria-label="Right">▶</button>
+</div>
 </div>
 <p class="note" id="msg">Press Start. Every 5th bite is a glitch orb, worth 5 points and a bigger burst.</p>
 <p class="note" id="history"></p>
@@ -81,17 +88,46 @@ const DPR = Math.min(window.devicePixelRatio || 1, 3);
 cv.width = 400 * DPR;
 cv.height = 400 * DPR;
 const N = 20, CELL = 20;
+// Jade Serpent board plate (wet stone). Falls back to the theme bg fill
+// until it loads, and forever if it fails.
+var boardImg = new Image(), boardReady = false;
+boardImg.onload = function () { boardReady = true; };
+boardImg.src = 'board-plate.webp';
+// The real serpent: an emerald scale skin (pattern-filled body) and a
+// photographic head sprite. Until both load, the drawn segments remain.
+var scaleImg = new Image(), headImg = new Image(), scaleReady = false, headReady = false;
+scaleImg.onload = function () { scaleReady = true; };
+headImg.onload = function () { headReady = true; };
+scaleImg.src = 'scale-body.webp';
+headImg.src = 'head-sprite.webp';
+var scalePattern = null;
+function getScalePattern() {
+  if (!scalePattern) {
+    var pc = document.createElement('canvas'); pc.width = 52; pc.height = 52;
+    pc.getContext('2d').drawImage(scaleImg, 0, 0, 52, 52);
+    scalePattern = ctx.createPattern(pc, 'repeat');
+  }
+  return scalePattern;
+}
+// Gentle rain over the wet stone: streaks + expanding ripple rings.
+// Skipped entirely for reduced-motion players.
+var reducedMotion = false;
+try { reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+var tick = 0, ripples = [];
+var rainDrops = [];
+for (var ri = 0; ri < 42; ri++) rainDrops.push({ x: Math.random() * 400, y: Math.random() * 400, v: 5 + Math.random() * 5, len: 7 + Math.random() * 8 });
 let snake, dir, dirQueue, food, score, eaten, glitch, running, paused;
 let frenzy = false, bonusFoods = [], frenzyTick = 0;
 let exploding = false, particles = [], explodeTimer = null, explodeFrame = 0;
 let themeIndex = 0;
-// Same original colours, just re-assigned on every bite: background, grid,
-// snake, food, and accent all rotate through these four arrangements.
+// JADE SERPENT: the world is fixed (wet stone plate, amber food); the
+// serpent's sheen rotates through four emerald-family arrangements on
+// every bite, the same rotation mechanic as the original palettes.
 const themes = [
-  {bg:'#06121c', grid:'rgba(0,240,255,.12)', a:'#00f0ff', b:'#ff2e88', food:'#ff2e88', orb:'#ffe259', accent:'#00f0ff'},
-  {bg:'#12061c', grid:'rgba(255,46,136,.14)', a:'#ff2e88', b:'#00f0ff', food:'#00f0ff', orb:'#ffe259', accent:'#ff2e88'},
-  {bg:'#041a12', grid:'rgba(255,226,89,.12)', a:'#ffe259', b:'#00f0ff', food:'#ff2e88', orb:'#00f0ff', accent:'#ffe259'},
-  {bg:'#0d0d0d', grid:'rgba(234,252,255,.12)', a:'#eafcff', b:'#ff2e88', food:'#00f0ff', orb:'#ffe259', accent:'#eafcff'}
+  {bg:'#04150d', grid:'rgba(190,255,220,.07)', a:'#2fd574', b:'#1aa862', food:'#ffb340', orb:'#ffe259', accent:'#2fe8a8'},
+  {bg:'#03130f', grid:'rgba(190,255,220,.07)', a:'#2fd5b0', b:'#17a88a', food:'#ffb340', orb:'#ffe259', accent:'#2fd5b0'},
+  {bg:'#051505', grid:'rgba(220,255,200,.07)', a:'#7ed957', b:'#4aa832', food:'#ffb340', orb:'#ffe259', accent:'#7ed957'},
+  {bg:'#101303', grid:'rgba(255,240,190,.08)', a:'#d8c95a', b:'#a89a35', food:'#ffb340', orb:'#7df9ff', accent:'#ffe259'}
 ];
 let best = 0;
 try { best = parseInt(localStorage.getItem('gs-best') || '0', 10) || 0; } catch (e) {}
@@ -300,8 +336,152 @@ function reset() {
   food = placeFood();
   document.getElementById('score').textContent = '0';
   updateShieldState();
-  document.getElementById('msg').textContent = 'Press Start. Walls wrap around, and every bite changes the colours. Every 5th bite is a gold glitch orb, worth 5 points, and it starts frenzy mode with 3 gold squares to eat.';
+  document.getElementById('msg').textContent = 'Press Start. Walls wrap around, and every bite shifts its sheen. Every 5th bite is a gold glitch orb, worth 5 points, and it starts frenzy mode with 3 gold orbs to eat.';
   draw();
+}
+// A glowing orb: hot core, saturated mid, deep edge, soft halo. Gold
+// orbs (every 5th bite, frenzy) burn brighter and pulse larger.
+function drawOrb(cx, cy, r, gold) {
+  var pulse = 1 + 0.09 * Math.sin(tick * 0.16);
+  var rr2 = r * pulse;
+  ctx.save();
+  ctx.shadowColor = gold ? '#ffe259' : '#ffb340'; ctx.shadowBlur = gold ? 20 : 14;
+  var g = ctx.createRadialGradient(cx - rr2 * 0.3, cy - rr2 * 0.3, rr2 * 0.15, cx, cy, rr2);
+  g.addColorStop(0, '#fff8dc');
+  g.addColorStop(0.45, gold ? '#ffe259' : '#ffb340');
+  g.addColorStop(1, gold ? '#c9a227' : '#c77400');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(cx, cy, rr2, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+// The real serpent, contained: every segment is a scale-skinned tile
+// that lives inside its own cell. Where a neighbour segment sits, the
+// tile runs flush to the shared edge and squares its corner, so the
+// body reads as one animal while never reaching into another block.
+// All shading is clipped inside the tile; the head is the photograph's
+// skull fitted inside the head cell, tongue kept on a short leash.
+function rrVar(x, y, w, h, rtl, rtr, rbr, rbl) {
+  ctx.beginPath();
+  ctx.moveTo(x + rtl, y);
+  ctx.lineTo(x + w - rtr, y); ctx.arcTo(x + w, y, x + w, y + rtr, rtr);
+  ctx.lineTo(x + w, y + h - rbr); ctx.arcTo(x + w, y + h, x + w - rbr, y + h, rbr);
+  ctx.lineTo(x + rbl, y + h); ctx.arcTo(x, y + h, x, y + h - rbl, rbl);
+  ctx.lineTo(x, y + rtl); ctx.arcTo(x, y, x + rtl, y, rtl);
+  ctx.closePath();
+}
+function drawSerpent(t) {
+  var pat = getScalePattern();
+  for (var i = snake.length - 1; i >= 0; i--) {
+    var s = snake[i];
+    var conn = { l: false, r: false, u: false, d: false };
+    [snake[i - 1], snake[i + 1]].forEach(nb => {
+      if (!nb) return;
+      if (nb.x === s.x - 1 && nb.y === s.y) conn.l = true;
+      if (nb.x === s.x + 1 && nb.y === s.y) conn.r = true;
+      if (nb.y === s.y - 1 && nb.x === s.x) conn.u = true;
+      if (nb.y === s.y + 1 && nb.x === s.x) conn.d = true;
+    });
+    var taper = i >= snake.length - 2 ? 1.5 : 0;
+    var rx = s.x * CELL + (conn.l ? 0 : 1 + taper);
+    var ry = s.y * CELL + (conn.u ? 0 : 1 + taper);
+    var rw = CELL - (conn.l ? 0 : 1 + taper) - (conn.r ? 0 : 1 + taper);
+    var rh = CELL - (conn.u ? 0 : 1 + taper) - (conn.d ? 0 : 1 + taper);
+    var R = 7, Q = 1;
+    rrVar(rx, ry, rw, rh,
+      (conn.u || conn.l) ? Q : R, (conn.u || conn.r) ? Q : R,
+      (conn.d || conn.r) ? Q : R, (conn.d || conn.l) ? Q : R);
+    ctx.save();
+    ctx.clip();
+    ctx.save();
+    var fl = (tick + i * 7) % 52;
+    ctx.translate(-fl * 0.4, 0);
+    ctx.fillStyle = pat;
+    ctx.fillRect(rx - 24, ry, rw + 48, rh);
+    ctx.restore();
+    ctx.fillStyle = t.a; ctx.globalAlpha = 0.15;
+    ctx.fillRect(rx, ry, rw, rh);
+    ctx.globalAlpha = 1;
+    var g = ctx.createLinearGradient(0, ry, 0, ry + rh);
+    g.addColorStop(0, 'rgba(255,255,255,.24)');
+    g.addColorStop(0.45, 'rgba(255,255,255,0)');
+    g.addColorStop(1, 'rgba(0,0,0,.30)');
+    ctx.fillStyle = g;
+    ctx.fillRect(rx, ry, rw, rh);
+    ctx.fillStyle = 'rgba(0,0,0,.16)';
+    var o1 = (i * 7) % 11, o2 = (i * 13) % 9;
+    ctx.fillRect(rx + 3 + o1, ry + 5 + o2, 2, 2);
+    ctx.fillRect(rx + rw - 5 - o2, ry + rh - 6 - o1 * 0.5, 2, 2);
+    ctx.restore();
+  }
+  // The head: the photo skull, rotated to travel, inside its own cell.
+  var h = snake[0], cx = h.x * CELL + CELL / 2, cy = h.y * CELL + CELL / 2;
+  var sw = headImg.width, sh = headImg.height * 0.52;
+  var dw = CELL - 2, dh = dw * sh / sw;
+  var ang = Math.atan2(dir.y, dir.x) + Math.PI / 2;
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(ang);
+  ctx.drawImage(headImg, 0, 0, sw, sh, -dw / 2, -dh / 2, dw, dh);
+  ctx.restore();
+  if (tick % 90 < 12) {
+    var fx = dir.x, fy = dir.y, px = -fy, py = fx;
+    var tx = cx + fx * 9.5, ty = cy + fy * 9.5;
+    ctx.strokeStyle = '#ff5f7a'; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(cx + fx * 6.5, cy + fy * 6.5); ctx.lineTo(tx, ty);
+    ctx.moveTo(tx, ty); ctx.lineTo(tx + (fx * 2 + px * 1.5), ty + (fy * 2 + py * 1.5));
+    ctx.moveTo(tx, ty); ctx.lineTo(tx + (fx * 2 - px * 1.5), ty + (fy * 2 - py * 1.5));
+    ctx.stroke(); ctx.lineWidth = 1;
+  }
+}
+// One serpent segment: rounded, vertically shaded (lit top, deep belly),
+// speckled like scales, with a glossy ridge. The head is the brightest
+// segment and carries eyes oriented to travel plus a flicking tongue.
+function rrPath(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function drawSegment(s, i, t) {
+  var x = s.x * CELL, y = s.y * CELL;
+  var head = i === 0;
+  if (head) { ctx.save(); ctx.shadowColor = 'rgba(160,255,205,.9)'; ctx.shadowBlur = 12; }
+  ctx.fillStyle = head ? '#63f2a4' : (i % 2 ? t.a : t.b);
+  rrPath(x + 1, y + 1, CELL - 2, CELL - 2, 6); ctx.fill();
+  if (head) ctx.restore();
+  var g = ctx.createLinearGradient(x, y, x, y + CELL);
+  g.addColorStop(0, 'rgba(255,255,255,.34)');
+  g.addColorStop(0.45, 'rgba(255,255,255,0)');
+  g.addColorStop(1, 'rgba(0,0,0,.30)');
+  ctx.fillStyle = g;
+  rrPath(x + 1, y + 1, CELL - 2, CELL - 2, 6); ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,.18)';
+  var o1 = (i * 7) % 11, o2 = (i * 13) % 9;
+  ctx.fillRect(x + 3 + o1, y + 5 + o2, 2, 2);
+  ctx.fillRect(x + 12 - o2, y + 11 - o1 * 0.5, 2, 2);
+  ctx.fillStyle = 'rgba(255,255,255,.30)';
+  ctx.beginPath(); ctx.ellipse(x + CELL / 2, y + 5, 5, 1.8, 0, 0, Math.PI * 2); ctx.fill();
+  if (head) {
+    var cx = x + CELL / 2, cy = y + CELL / 2;
+    var fx = dir.x, fy = dir.y, px = -fy, py = fx;
+    [-1, 1].forEach(sd => {
+      var ex = cx + fx * 3.5 + px * 4.4 * sd, ey = cy + fy * 3.5 + py * 4.4 * sd;
+      ctx.fillStyle = '#eafff3';
+      ctx.beginPath(); ctx.arc(ex, ey, 2.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#06231a';
+      ctx.beginPath(); ctx.arc(ex + fx * 0.9, ey + fy * 0.9, 1.3, 0, Math.PI * 2); ctx.fill();
+    });
+    if (tick % 90 < 12) {
+      var tx = cx + fx * 11, ty = cy + fy * 11;
+      ctx.strokeStyle = '#ff5f7a'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(cx + fx * 8, cy + fy * 8); ctx.lineTo(tx, ty);
+      ctx.moveTo(tx, ty); ctx.lineTo(tx + (fx * 3 + px * 2), ty + (fy * 3 + py * 2));
+      ctx.moveTo(tx, ty); ctx.lineTo(tx + (fx * 3 - px * 2), ty + (fy * 3 - py * 2));
+      ctx.stroke(); ctx.lineWidth = 1;
+    }
+  }
 }
 function draw() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -310,7 +490,8 @@ function draw() {
   if (frenzy) themeIndex = frenzyTick % themes.length;
   const t = themes[themeIndex];
   cv.style.borderColor = t.accent;
-  ctx.fillStyle = t.bg; ctx.fillRect(0, 0, 400, 400);
+  if (boardReady) ctx.drawImage(boardImg, 0, 0, 400, 400);
+  else { ctx.fillStyle = t.bg; ctx.fillRect(0, 0, 400, 400); }
   ctx.strokeStyle = t.grid;
   for (let i = 1; i < N; i++) {
     ctx.beginPath(); ctx.moveTo(i*CELL, 0); ctx.lineTo(i*CELL, 400); ctx.stroke();
@@ -319,16 +500,10 @@ function draw() {
   // Food: theme food colour normally, theme orb colour for a glitch orb.
   // In frenzy, the single food is replaced by 3 gold bonus squares.
   if (frenzy) {
-    ctx.fillStyle = '#ffe259';
-    bonusFoods.forEach(b => ctx.fillRect(b.x*CELL+3, b.y*CELL+3, CELL-6, CELL-6));
+    bonusFoods.forEach(b => drawOrb(b.x*CELL + CELL/2, b.y*CELL + CELL/2, 7.5, true));
   } else if (food) {
     const orb = (eaten + 1) % 5 === 0;
-    ctx.fillStyle = orb ? t.orb : t.food;
-    // glow
-    ctx.save();
-    ctx.shadowColor = orb ? t.orb : t.food; ctx.shadowBlur = 14;
-    ctx.fillRect(food.x*CELL+3, food.y*CELL+3, CELL-6, CELL-6);
-    ctx.restore();
+    drawOrb(food.x*CELL + CELL/2, food.y*CELL + CELL/2, orb ? 8.5 : 6.5, orb);
   }
   // Shield tile: a blue diamond (shape-coded, not colour alone), drawn
   // only outside frenzy. While active, the board edge glows gold.
@@ -337,6 +512,10 @@ function draw() {
     ctx.fillStyle = '#38b6ff';
     ctx.beginPath();
     ctx.moveTo(cx, cy - 8); ctx.lineTo(cx + 8, cy); ctx.lineTo(cx, cy + 8); ctx.lineTo(cx - 8, cy);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.38)';
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - 4.5); ctx.lineTo(cx + 4.5, cy); ctx.lineTo(cx, cy + 4.5); ctx.lineTo(cx - 4.5, cy);
     ctx.closePath(); ctx.fill();
     ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 2; ctx.stroke(); ctx.lineWidth = 1;
   }
@@ -350,28 +529,35 @@ function draw() {
     particles.forEach(p => {
       ctx.fillStyle = p.color;
       const size = Math.max(2, CELL - 2 - explodeFrame * 0.5);
-      ctx.fillRect(p.x - size/2, p.y - size/2, size, size);
+      ctx.beginPath(); ctx.arc(p.x, p.y, size / 2, 0, Math.PI * 2); ctx.fill();
     });
   } else {
-    snake.forEach((s, i) => {
-      if (i === 0) {
-        // head glow
-        ctx.save();
-        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 12;
-        ctx.fillStyle = '#ffffff';
-        ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
-        ctx.restore();
-      } else {
-        ctx.fillStyle = i % 2 ? t.a : t.b;
-        ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
-      }
-    });
+    if (headReady && scaleReady) drawSerpent(t); else snake.forEach((s, i) => drawSegment(s, i, t));
   }
   // Bite particles, in the bitten food's colour.
   biteParticles.forEach(p => {
+    ctx.save();
+    ctx.shadowColor = p.color; ctx.shadowBlur = 6;
     ctx.fillStyle = p.color;
-    ctx.fillRect(p.x - 3, p.y - 3, 6, 6);
+    ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
   });
+  // Rain over the wet stone: falling streaks and ripple rings.
+  if (!reducedMotion) {
+    tick++;
+    ctx.strokeStyle = 'rgba(200,255,230,.13)'; ctx.lineWidth = 1;
+    rainDrops.forEach(d => {
+      ctx.beginPath(); ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - 2, d.y + d.len); ctx.stroke();
+      d.y += d.v; if (d.y > 400) { d.y = -12; d.x = Math.random() * 400; }
+    });
+    if (tick % 50 === 0 && ripples.length < 3) ripples.push({ x: 20 + Math.random() * 360, y: 20 + Math.random() * 360, r: 2 });
+    ripples = ripples.filter(rp => rp.r < 26);
+    ripples.forEach(rp => {
+      ctx.strokeStyle = 'rgba(190,255,220,' + (0.20 * (1 - rp.r / 26)).toFixed(3) + ')';
+      ctx.beginPath(); ctx.ellipse(rp.x, rp.y, rp.r, rp.r * 0.42, 0, 0, Math.PI * 2); ctx.stroke();
+      rp.r += 0.7;
+    });
+  }
   // Glitch burst: shift a few horizontal slices for a few frames after eating.
   // The source rect is in device pixels (DPR-scaled backing store).
   if (glitch > 0) {
@@ -383,7 +569,7 @@ function draw() {
     glitch--;
   }
   if (!running && !exploding) {
-    ctx.fillStyle = 'rgba(4,7,13,.72)'; ctx.fillRect(0, 0, 400, 400);
+    ctx.fillStyle = 'rgba(3,15,9,.72)'; ctx.fillRect(0, 0, 400, 400);
     ctx.fillStyle = '#eafcff'; ctx.font = '700 24px system-ui'; ctx.textAlign = 'center';
     if (paused) {
       ctx.fillText('Paused', 200, 180);
@@ -396,7 +582,7 @@ function draw() {
       ctx.fillText('The grid glitched you out.', 200, 230);
       ctx.fillText(dailyMode ? "Today's board. Press Start to play again." : 'Press Start to play again.', 200, 258);
     } else {
-      ctx.fillText('Glitch Snake', 200, 168);
+      ctx.fillText('Jade Serpent', 200, 168);
       ctx.font = '16px system-ui';
       ctx.fillText('Eat. Glitch. Repeat.', 200, 200);
       ctx.fillText("Today's best: " + dailyBest, 200, 230);
@@ -491,10 +677,10 @@ function step() {
     playBlip(320 + Math.min(combo, 12) * 40);
     document.getElementById('score').textContent = score;
     if (orb) {
-      // Frenzy mode: 3 random gold squares appear, and the background
+      // Frenzy mode: 3 random gold orbs appear, and the background
       // cycles colours on every move until all 3 are eaten.
       frenzy = true; frenzyTick = 0; bonusFoods = placeBonusFoods(); food = null;
-      document.getElementById('msg').textContent = 'Frenzy mode! Eat all 3 gold squares.';
+      document.getElementById('msg').textContent = 'Frenzy mode! Eat all 3 gold orbs.';
     } else {
       document.getElementById('msg').textContent = 'Nice bite. Score ' + score + '.';
       // Shield cadence runs on normal bites only: it never changes eaten,
