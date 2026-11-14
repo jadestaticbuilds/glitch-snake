@@ -75,7 +75,7 @@ html,body{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;us
 <button data-dir="left" aria-label="Left">◀</button><button data-dir="down" aria-label="Down">▼</button><button data-dir="right" aria-label="Right">▶</button>
 </div>
 </div>
-<p class="note"><span id="msg">Press Start. Eat the amber orbs, grow long, and don't bite yourself — every 5th bite is a glitch orb worth 5 points and a bigger burst.</span> <span id="history"></span></p>
+<p class="note"><span id="msg">Press Start. Eat the amber orbs, grow long, and don't bite yourself. Every 5th bite is a glitch orb worth 5 points and a bigger burst.</span> <span id="history"></span></p>
 <p class="note foot">A Jade Static Builds collab, built with Muse. No signup, no upload.</p>
 </main>
 <script>
@@ -704,7 +704,7 @@ function start() {
   clearInterval(explodeTimer);
   accMs = 0; hitStopMs = 0; lastFrame = 0;
   document.getElementById('pauseBtn').textContent = 'Pause';
-  document.getElementById('msg').textContent = 'Playing. Eat the amber orbs — every 5th bite is a gold glitch orb worth 5. After score 20, a blue shield tile can appear.';
+  document.getElementById('msg').textContent = 'Playing. Eat the amber orbs. Every 5th bite is a gold glitch orb worth 5. After score 20, a blue shield tile can appear.';
   draw();
 }
 function startDaily() {
